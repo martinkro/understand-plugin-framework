@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">PluginDemo</string>
     <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello,World!</string>
+    <string name="say_hello">Say Hello</string>
+    <string name="static_proxy">Static Proxy</string>
+    <string name="dynamic_proxy">Dynamic Proxy</string>
+    <string name="activity_hook">Activity Hook</string>
 </resources>

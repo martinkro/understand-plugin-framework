@@ -8,13 +8,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private TextView mTextViewHello;
+    private TextView mTextViewInfo;
+    private EditText mEditTextName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -26,6 +33,15 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        mTextViewHello = findViewById(R.id.tv_hello);
+        mTextViewInfo = findViewById(R.id.tv_info);
+        mEditTextName = findViewById(R.id.et_name);
+
+        findViewById(R.id.bt_say_hello).setOnClickListener(this);
+        findViewById(R.id.bt_static_proxy).setOnClickListener(this);
+        findViewById(R.id.bt_dynamic_proxy).setOnClickListener(this);
+        findViewById(R.id.bt_activity_hook).setOnClickListener(this);
     }
 
     @Override
@@ -48,5 +64,24 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v){
+        int id = v.getId();
+        switch(id){
+            case R.id.bt_say_hello:
+                mTextViewHello.setText("Hello " + mEditTextName.getText().toString() + "!");
+                break;
+            case R.id.bt_static_proxy:
+                break;
+            case R.id.bt_dynamic_proxy:
+                break;
+            case R.id.bt_activity_hook:
+                break;
+            default:
+                mTextViewInfo.setText("Unknown Click");
+                break;
+        }
     }
 }
