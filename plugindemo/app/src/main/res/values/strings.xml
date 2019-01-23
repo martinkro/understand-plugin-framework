@@ -6,4 +6,5 @@
     <string name="static_proxy">Static Proxy</string>
     <string name="dynamic_proxy">Dynamic Proxy</string>
     <string name="activity_hook">Activity Hook</string>
+    <string name="context_hook">Context Hook</string>
 </resources>

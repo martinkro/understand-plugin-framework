@@ -1,5 +1,8 @@
 package info.loveai.plugindemo;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,6 +14,8 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import info.loveai.hook.HookHelper;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView mTextViewHello;
@@ -20,6 +25,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        try{
+            HookHelper.hookActivity(this);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -42,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.bt_static_proxy).setOnClickListener(this);
         findViewById(R.id.bt_dynamic_proxy).setOnClickListener(this);
         findViewById(R.id.bt_activity_hook).setOnClickListener(this);
+        findViewById(R.id.bt_context_hook).setOnClickListener(this);
     }
 
     @Override
@@ -78,10 +90,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.bt_dynamic_proxy:
                 break;
             case R.id.bt_activity_hook:
+                onActivityHook();
+                break;
+            case R.id.bt_context_hook:
+                onContextHook();
                 break;
             default:
                 mTextViewInfo.setText("Unknown Click");
                 break;
+        }
+    }
+
+    private void onContextHook(){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setData(Uri.parse("https://www.baidu.com"));
+
+        // 注意这里使用的ApplicationContext 启动的Activity
+        // 因为Activity对象的startActivity使用的并不是ContextImpl的mInstrumentation
+        // 而是自己的mInstrumentation, 如果你需要这样, 可以自己Hook
+        // 比较简单, 直接替换这个Activity的此字段即可.
+        getApplicationContext().startActivity(intent);
+    }
+
+    private void onActivityHook(){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        // intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setData(Uri.parse("https://www.baidu.com"));
+
+        startActivity(intent);
+    }
+
+    @Override
+    protected void attachBaseContext(Context context) {
+        super.attachBaseContext(context);
+        try {
+            HookHelper.attachContext();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
