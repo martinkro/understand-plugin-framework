@@ -1,5 +1,7 @@
 package info.loveai.sample;
 
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -127,5 +129,9 @@ public class MainActivity extends AppCompatActivity
             default:
                 break;
         }
+    }
+
+    public void testGetSystemService(){
+        ClipboardManager cm = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
     }
 }

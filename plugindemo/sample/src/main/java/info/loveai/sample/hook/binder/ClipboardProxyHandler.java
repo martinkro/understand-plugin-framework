@@ -31,6 +31,7 @@ public class ClipboardProxyHandler implements InvocationHandler {
         if ("queryLocalInterface".equals(method.getName())) {
             Log.d(TAG, "hook queryLocalInterface");
 
+            // return IClipboard.Proxy
             return Proxy.newProxyInstance(
                     proxy.getClass().getClassLoader(),
                     new Class[]{mIInterface},

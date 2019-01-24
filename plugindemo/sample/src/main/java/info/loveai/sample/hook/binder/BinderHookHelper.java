@@ -15,6 +15,7 @@ public class BinderHookHelper {
 
         IBinder rawBinder = (IBinder) getService.invoke(null, CLIPBOARD_SERVICE);
 
+        // IClipboard.Stub extends android.os.Binder
         IBinder hookedBinder = (IBinder) Proxy.newProxyInstance(
                 serviceManager.getClassLoader(),
                 new Class<?>[] { IBinder.class },

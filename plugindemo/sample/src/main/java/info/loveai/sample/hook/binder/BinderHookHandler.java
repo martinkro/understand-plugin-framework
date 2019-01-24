@@ -7,10 +7,12 @@ import android.util.Log;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
+// interface IClipboard
 public class BinderHookHandler implements InvocationHandler {
     private static final String TAG = "BinderHookHandler";
 
     // IInterface service object
+    // interface IClipboard extends android.os.IInterface
     private Object mBase;
 
     public BinderHookHandler(IBinder base, Class<?> stubClass){
