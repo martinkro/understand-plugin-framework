@@ -2,6 +2,8 @@ package info.loveai.sample;
 
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,6 +19,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import info.loveai.hook.AMSHookHelper;
 import info.loveai.sample.hook.binder.BinderHookHelper;
 
 public class MainActivity extends AppCompatActivity
@@ -24,6 +27,21 @@ public class MainActivity extends AppCompatActivity
 
     TextView mTextViewInfo;
     EditText mEditTextInfo;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        //HookHelper.hookActivityManager();
+        //HookHelper.hookPackageManager(newBase);
+        //AMSHookHelper.hookActivityManagerNative();
+        //AMSHookHelper.hookActivityThreadHandler();
+        super.attachBaseContext(newBase);
+        try {
+            AMSHookHelper.hookActivityManagerNative();
+            AMSHookHelper.hookActivityThreadHandler();
+        } catch (Throwable throwable) {
+            throw new RuntimeException("hook failed", throwable);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +58,8 @@ public class MainActivity extends AppCompatActivity
         mTextViewInfo = findViewById(R.id.tv_info);
         mEditTextInfo = findViewById(R.id.et_info);
         findViewById(R.id.bt_binder_hook).setOnClickListener(this);
+        findViewById(R.id.bt_test_ams).setOnClickListener(this);
+        findViewById(R.id.bt_test_pms).setOnClickListener(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -125,6 +145,15 @@ public class MainActivity extends AppCompatActivity
         int id = v.getId();
         switch(id){
             case R.id.bt_binder_hook:
+                break;
+            case R.id.bt_test_ams:
+                Uri uri = Uri.parse("https://wwww.baidu.com");
+                Intent t = new Intent(Intent.ACTION_VIEW);
+                t.setData(uri);
+                startActivity(t);
+                break;
+            case R.id.bt_test_pms:
+                getPackageManager().getInstalledApplications(0);
                 break;
             default:
                 break;

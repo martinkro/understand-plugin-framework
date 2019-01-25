@@ -26,5 +26,23 @@
         android:layout_height="wrap_content"
         android:text="@string/binder_hook"
         app:layout_constraintTop_toBottomOf="@id/et_info"/>
+    <Button
+        android:id="@+id/bt_test_ams"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/test_ams"
+        app:layout_constraintTop_toBottomOf="@id/bt_binder_hook"/>
+    <Button
+        android:id="@+id/bt_test_pms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/test_pms"
+        app:layout_constraintTop_toBottomOf="@id/bt_test_ams"/>
+    <Button
+        android:id="@+id/bt_start_target_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/start_target_activity"
+        app:layout_constraintTop_toBottomOf="@id/bt_test_pms"/>
 
 </android.support.constraint.ConstraintLayout>
