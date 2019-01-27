@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PermissionGroupInfo;
+import android.content.pm.PermissionInfo;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
@@ -43,12 +44,12 @@ public class MainActivity extends AppCompatActivity
         //AMSHookHelper.hookActivityManagerNative();
         //AMSHookHelper.hookActivityThreadHandler();
         super.attachBaseContext(newBase);
-//        try {
-//            AMSHookHelper.hookActivityManagerNative();
-//            AMSHookHelper.hookActivityThreadHandler();
-//        } catch (Throwable throwable) {
-//            throw new RuntimeException("hook failed", throwable);
-//        }
+        try {
+            AMSHookHelper.hookActivityManagerNative();
+            AMSHookHelper.hookActivityThreadHandler();
+        } catch (Throwable throwable) {
+            throw new RuntimeException("hook failed", throwable);
+        }
     }
 
     @Override
@@ -168,13 +169,16 @@ public class MainActivity extends AppCompatActivity
             case R.id.bt_get_pkg_list:
                 getPackageList();
                 break;
+            case R.id.bt_start_target_activity:
+                startActivity(new Intent(MainActivity.this, TargetActivity.class));
+                break;
             default:
                 break;
         }
     }
 
     public void getPackageList(){
-        Log.d(TAG,"Use getInstalledApplications");
+        Log.d(TAG,"===>Use getInstalledApplications");
         List<ApplicationInfo> listAppInfo = getPackageManager().getInstalledApplications(0);
         for(ApplicationInfo app:listAppInfo){
             if ((app.flags & ApplicationInfo.FLAG_SYSTEM)  == 0){
@@ -182,23 +186,30 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-        Log.d(TAG,"Use queryIntentActivities");
+        Log.d(TAG,"===>Use queryIntentActivities");
         Intent intent = new Intent();
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.setAction(Intent.ACTION_MAIN);
         List<ResolveInfo> resolveInfos = getPackageManager().queryIntentActivities(intent, 0);
         for(ResolveInfo info:resolveInfos){
-            String packageName = info.activityInfo.applicationInfo.packageName;
-            Log.d(TAG,"package name:" + packageName);
+            if ((info.activityInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0){
+                String packageName = info.activityInfo.applicationInfo.packageName;
+                Log.d(TAG,"package name:" + packageName);
+            }
+
         }
 
         List<PermissionGroupInfo> groupInfoList =getPackageManager().getAllPermissionGroups(0);
         for(PermissionGroupInfo info:groupInfoList){
-            Log.d(TAG,"PermissionGroup name:" + info.name);
+            //Log.d(TAG,"PermissionGroup name:" + info.name);
         }
-        Log.d(TAG,"Use queryIntentActivities");
+        Log.d(TAG,"===>Use queryPermissionsByGroup");
         try {
-            getPackageManager().queryPermissionsByGroup("android.permission-group.STORAGE", 0);
+            List<PermissionInfo> infos = getPackageManager().queryPermissionsByGroup("android.permission-group.STORAGE", 0);
+            for(PermissionInfo info:infos){
+                String packageName = info.packageName;
+                Log.d(TAG,"package name:" + packageName);
+            }
         }catch (Exception e){
 
         }
