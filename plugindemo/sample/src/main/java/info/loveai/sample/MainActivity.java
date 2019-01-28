@@ -188,31 +188,34 @@ public class MainActivity extends AppCompatActivity
 
         Log.d(TAG,"===>Use queryIntentActivities");
         Intent intent = new Intent();
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        //intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.setAction(Intent.ACTION_MAIN);
         List<ResolveInfo> resolveInfos = getPackageManager().queryIntentActivities(intent, 0);
         for(ResolveInfo info:resolveInfos){
             if ((info.activityInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0){
                 String packageName = info.activityInfo.applicationInfo.packageName;
                 Log.d(TAG,"package name:" + packageName);
+                Log.d(TAG,"package path:" + info.activityInfo.applicationInfo.publicSourceDir);
             }
 
         }
 
         List<PermissionGroupInfo> groupInfoList =getPackageManager().getAllPermissionGroups(0);
         for(PermissionGroupInfo info:groupInfoList){
-            //Log.d(TAG,"PermissionGroup name:" + info.name);
-        }
-        Log.d(TAG,"===>Use queryPermissionsByGroup");
-        try {
-            List<PermissionInfo> infos = getPackageManager().queryPermissionsByGroup("android.permission-group.STORAGE", 0);
-            for(PermissionInfo info:infos){
-                String packageName = info.packageName;
-                Log.d(TAG,"package name:" + packageName);
-            }
-        }catch (Exception e){
+            Log.d(TAG,"PermissionGroup name:" + info.name);
 
+            Log.d(TAG,"===>Use queryPermissionsByGroup");
+            try {
+                List<PermissionInfo> infos = getPackageManager().queryPermissionsByGroup(info.name, 0);
+                for(PermissionInfo pinfo:infos){
+                    String packageName = pinfo.packageName;
+                    Log.d(TAG,"package name:" + packageName);
+                }
+            }catch (Exception e){
+
+            }
         }
+
 
     }
 
