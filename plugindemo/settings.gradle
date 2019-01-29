@@ -1,1 +1,1 @@
-include ':app', ':sample', ':hookclassloader'
+include ':app', ':sample', ':hookclassloader', ':test', ':hookdynamicproxy', ':hookamspms'

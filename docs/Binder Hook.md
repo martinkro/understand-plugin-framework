@@ -166,3 +166,6 @@ private static class Proxy implements IBookStore{
 
 }
 ```
+
+# ClassLoader
+http://androidxref.com/6.0.1_r10/xref/libcore/dalvik/src/main/java/dalvik/system/BaseDexClassLoader.java
